@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                checkout scmGit(branches: [[name: '*/Dev']], extensions: [], userRemoteConfigs: [[credentialsId: 'Github', url: 'https://github.com/Induprojects/Capstone-Project.git']])
+                checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[credentialsId: 'Github', url: '']])
                 sh 'npm install'
                 // sh 'npm run build'
             }
@@ -20,21 +20,21 @@ pipeline {
        stage('Build Image') {
             steps { 
                 sh 'docker build -t reactimage .'
-                sh 'docker tag reactimage:latest indumathicloud001/dev:latest'
+                sh 'docker tag reactimage:latest jeevithals25/dev:latest'
             }    
        }
        stage('Docker login') {
             steps { 
-                withCredentials([usernamePassword(credentialsId: 'Dockercred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                sh 'docker push indumathicloud001/dev:latest'
+                sh 'docker push jeevithals25/dev:latest'
                 }
             }
        }
        stage('Deploy') {
             steps {  
                 script {
-                   def dockerCmd = 'docker run -itd --name My-first-container -p 80:5000 indumathicloud001/dev:latest'
+                   def dockerCmd = 'docker run -itd --name My-first-container -p 80:5000 jeevithals25/dev:latest'
                    sshagent(['sshkeypair']) {
                    sh "ssh -o StrictHostKeyChecking=no ubuntu@54.86.64.88 ${dockerCmd}"
                    }
