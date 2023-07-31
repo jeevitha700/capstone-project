@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                checkout scmGit(branches: [[name: '*/Dev']], extensions: [], userRemoteConfigs: [[credentialsId: 'Github', url: 'https://github.com/Induprojects/Capstone-Project.git']])
+                checkout scmGit(branches: [[name: '*/Dev']], extensions: [], userRemoteConfigs: [[credentialsId: 'Github', url: 'https://github.com/jeevitha700/capstone-project.git']])
                 sh 'npm install'
                 // sh 'npm run build'
             }
@@ -20,14 +20,14 @@ pipeline {
        stage('Build Image') {
             steps { 
                 sh 'docker build -t reactimage .'
-                sh 'docker tag reactimage:latest indumathicloud001/dev:latest'
+                sh 'docker tag reactimage:latest jeevithals25/dev:latest'
             }    
        }
        stage('Docker login') {
             steps { 
-                withCredentials([usernamePassword(credentialsId: 'Dockercred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                sh 'docker push indumathicloud001/dev:latest'
+                sh 'docker push jeevithals25/dev:latest'
                 }
             }
        }
