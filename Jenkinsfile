@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[credentialsId: 'Github', url: '']])
+                checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[credentialsId: 'Github', url: 'https://github.com/jeevitha700/capstone-project.git']])
                 sh 'npm install'
                 // sh 'npm run build'
             }
