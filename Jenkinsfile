@@ -18,7 +18,8 @@ pipeline {
             }
         }
        stage('Build Image') {
-            steps { 
+            steps {
+                sh 'docker image prune'
                 sh 'docker build -t reactimage .'
                 sh 'docker tag reactimage:latest jeevithals25/dev:latest'
             }    
